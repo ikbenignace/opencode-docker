@@ -1,5 +1,6 @@
-# Use Microsoft's Universal DevContainer as base
-FROM mcr.microsoft.com/devcontainers/universal:2-linux
+# Use Microsoft's DevContainer base image with Ubuntu 22.04 (GLIBC 2.35)
+# This is required for bun-pty terminal support which needs GLIBC 2.32+
+FROM mcr.microsoft.com/devcontainers/base:jammy
 
 # Set environment variables
 ENV OPENCODE_SERVER_PORT=4096
@@ -19,7 +20,12 @@ RUN curl -fsSL --insecure https://github.com/oven-sh/bun/releases/latest/downloa
 ENV BUN_INSTALL="/root/.bun"
 ENV PATH="$BUN_INSTALL/bin:$PATH"
 
-# Install OpenCode using npm (from the base image)
+# Install Node.js and npm
+# Using NodeSource repository to get a recent version
+RUN curl -fsSL --insecure https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs npm
+
+# Install OpenCode using npm
 # Note: SSL verification temporarily disabled due to certificate chain issues in build environment
 # Downloads latest version; for production use, consider pinning: npm install -g opencode-ai@VERSION
 RUN npm config set strict-ssl false && \

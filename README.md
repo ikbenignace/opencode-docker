@@ -4,7 +4,7 @@ A Docker container for [OpenCode AI](https://opencode.ai/) - an AI coding assist
 
 ## Features
 
-- **Base Image**: `mcr.microsoft.com/devcontainers/universal:2-linux` (multi-language support + git)
+- **Base Image**: `mcr.microsoft.com/devcontainers/base:jammy` (Ubuntu 22.04 with GLIBC 2.35 for terminal support)
 - **OpenCode Web**: Runs the OpenCode web interface on startup
 - **Bun Runtime**: Includes Bun JavaScript runtime (available for use in projects)
 - **Port**: Exposes port 4096 for the web UI
