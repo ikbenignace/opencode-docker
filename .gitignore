@@ -1,6 +1,5 @@
-# Data and config directories (persistent storage)
-data/
-config/
+# Home directory (persistent storage)
+home/
 
 # OS files
 .DS_Store

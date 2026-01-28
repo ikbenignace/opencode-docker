@@ -8,9 +8,8 @@ A Docker container for [OpenCode AI](https://opencode.ai/) - an AI coding assist
 - **OpenCode Web**: Runs the OpenCode web interface on startup
 - **Bun Runtime**: Includes Bun JavaScript runtime (available for use in projects)
 - **Port**: Exposes port 4096 for the web UI
-- **Persistent Storage**: Separate volumes for projects and configuration
-  - `./data` - Projects and working directory
-  - `./config` - Global configuration, providers, and oh-my-opencode settings
+- **Persistent Storage**: Single volume mount for the entire home directory
+  - `./home` → `/root` - Contains projects, `.config`, and all user data
 - **Auto-Published**: Automatically built and published to GHCR when Dockerfile changes
 
 ## Quick Start
@@ -46,8 +45,7 @@ You can use the pre-built image without cloning the repository:
 docker run -d \
   --name opencode-web \
   -p 4096:4096 \
-  -v ./data:/data \
-  -v ./config:/root/.config/opencode \
+  -v ./home:/root \
   ghcr.io/ikbenignace/opencode-docker:latest
 ```
 
@@ -65,8 +63,7 @@ docker run -d \
    docker run -d \
      --name opencode-web \
      -p 4096:4096 \
-     -v ./data:/data \
-     -v ./config:/root/.config/opencode \
+     -v ./home:/root \
      opencode-docker
    ```
 
@@ -86,8 +83,7 @@ Example with authentication:
 docker run -d \
   --name opencode-web \
   -p 4096:4096 \
-  -v ./data:/data \
-  -v ./config:/root/.config/opencode \
+  -v ./home:/root \
   -e OPENCODE_SERVER_PASSWORD=your-secure-password-here \
   -e OPENCODE_SERVER_USERNAME=admin \
   ghcr.io/ikbenignace/opencode-docker:latest
@@ -106,32 +102,32 @@ environment:
 
 ### Persistent Storage
 
-The container uses two separate volumes for persistent storage:
+The container uses a single volume mount for the entire home directory:
 
-#### 1. Projects Directory (`./data`)
-- Mounted at `/data` inside the container
-- This is your working directory where you work on code projects
-- All project files and project-specific `.opencode/` directories are stored here
+#### Home Directory (`./home`)
+- Mounted at `/root` inside the container
+- This is the container's home directory and working directory
+- Contains everything:
+  - **Projects**: Clone your repositories directly in `/root` (they'll appear in `./home` on your host)
+  - **Configuration**: `.config/opencode` directory with provider settings, API keys, and oh-my-opencode
+  - **User data**: All other files and directories you create
 
-#### 2. Configuration Directory (`./config`)
-- Mounted at `/root/.config/opencode` inside the container
-- Stores global OpenCode configuration including:
-  - Provider settings (API keys for OpenAI, Anthropic, etc.)
-  - Oh-my-opencode installations and configurations
-  - Global agents, commands, and plugins
-  - User preferences and themes
+This simple approach keeps everything in one place - just like a real home directory!
 
 **With Docker Compose:**
-- Projects: `./data` in your current directory
-- Config: `./config` in your current directory
+- Everything in `./home` directory on your host machine
 
-**With Docker CLI, specify both volume mounts:**
+**With Docker CLI:**
 ```bash
--v /path/to/your/projects:/data \
--v /path/to/your/config:/root/.config/opencode
+-v /path/to/your/home:/root
 ```
 
-This separation ensures that your provider configurations and global settings persist independently from your project files.
+**Example workflow:**
+1. Start container with `docker-compose up -d`
+2. Access the web UI and work on your code
+3. Your projects and configs are automatically saved in `./home`
+4. Stop container with `docker-compose down`
+5. Restart anytime - all your data persists in `./home`
 
 ## Accessing the Web Interface
 
