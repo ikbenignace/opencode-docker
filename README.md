@@ -6,7 +6,7 @@ A Docker container for [OpenCode AI](https://opencode.ai/) - an AI coding assist
 
 - **Base Image**: `mcr.microsoft.com/devcontainers/universal:2-linux` (multi-language support + git)
 - **OpenCode Web**: Runs the OpenCode web interface on startup
-- **Bun Runtime**: Includes Bun JavaScript runtime for enhanced performance
+- **Bun Runtime**: Includes Bun JavaScript runtime (available for use in projects)
 - **Port**: Exposes port 4096 for the web UI
 - **Persistent Storage**: Separate volumes for projects and configuration
   - `./data` - Projects and working directory
