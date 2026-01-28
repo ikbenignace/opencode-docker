@@ -5,9 +5,21 @@ FROM mcr.microsoft.com/devcontainers/universal:2-linux
 ENV OPENCODE_SERVER_PORT=4096
 ENV OPENCODE_SERVER_HOSTNAME=0.0.0.0
 
-# Install opencode globally
-# Note: strict-ssl is temporarily disabled during installation to handle certificate chain issues
-# in Docker build environments. This is re-enabled immediately after installation.
+# Install Bun
+# Download and install Bun manually to handle SSL certificate issues in build environments
+RUN curl -fsSL --insecure https://github.com/oven-sh/bun/releases/latest/download/bun-linux-x64.zip -o /tmp/bun.zip && \
+    unzip -q /tmp/bun.zip -d /tmp && \
+    mkdir -p /root/.bun/bin && \
+    mv /tmp/bun-linux-x64/bun /root/.bun/bin/ && \
+    chmod +x /root/.bun/bin/bun && \
+    rm -rf /tmp/bun.zip /tmp/bun-linux-x64
+
+# Add Bun to PATH
+ENV BUN_INSTALL="/root/.bun"
+ENV PATH="$BUN_INSTALL/bin:$PATH"
+
+# Install OpenCode using npm (from the base image)
+# Note: Temporarily disabling SSL verification for npm in build environment
 RUN npm config set strict-ssl false && \
     npm install -g opencode-ai && \
     npm config set strict-ssl true
