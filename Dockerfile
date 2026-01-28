@@ -21,9 +21,12 @@ ENV BUN_INSTALL="/root/.bun"
 ENV PATH="$BUN_INSTALL/bin:$PATH"
 
 # Install Node.js and npm
-# Using NodeSource repository to get a recent version
-RUN curl -fsSL --insecure https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs npm
+# Note: Using Ubuntu's default Node.js (v12) with npm package
+# This is sufficient for installing OpenCode via npm
+RUN apt-get update && \
+    apt-get install -y nodejs npm && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install OpenCode using npm
 # Note: SSL verification temporarily disabled due to certificate chain issues in build environment
