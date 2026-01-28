@@ -6,7 +6,10 @@ ENV OPENCODE_SERVER_PORT=4096
 ENV OPENCODE_SERVER_HOSTNAME=0.0.0.0
 
 # Install opencode globally
-RUN npm install -g opencode
+# Using --strict-ssl=false to handle potential certificate issues in build environments
+RUN npm config set strict-ssl false && \
+    npm install -g opencode-ai && \
+    npm config set strict-ssl true
 
 # Create data directory for persistent storage
 RUN mkdir -p /data && chmod 777 /data
