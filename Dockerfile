@@ -12,10 +12,13 @@ RUN npm config set strict-ssl false && \
     npm install -g opencode-ai && \
     npm config set strict-ssl true
 
-# Create data directory for persistent storage with appropriate permissions
-RUN mkdir -p /data && chmod 755 /data
+# Create directories for persistent storage with appropriate permissions
+# /data: Projects and working directory
+# /root/.config/opencode: Global configuration, providers, and oh-my-opencode
+RUN mkdir -p /data /root/.config/opencode && \
+    chmod 755 /data /root/.config/opencode
 
-# Set working directory
+# Set working directory to /data for projects
 WORKDIR /data
 
 # Expose the web UI port

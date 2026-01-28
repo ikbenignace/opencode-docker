@@ -7,10 +7,16 @@ on:
       - master
     tags:
       - 'v*'
+    paths:
+      - 'Dockerfile'
+      - '.github/workflows/docker-publish.yml'
   pull_request:
     branches:
       - main
       - master
+    paths:
+      - 'Dockerfile'
+      - '.github/workflows/docker-publish.yml'
   workflow_dispatch:
 
 env:

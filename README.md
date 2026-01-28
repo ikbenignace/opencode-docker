@@ -7,8 +7,10 @@ A Docker container for [OpenCode AI](https://opencode.ai/) - an AI coding assist
 - **Base Image**: `mcr.microsoft.com/devcontainers/universal:2-linux` (multi-language support + git)
 - **OpenCode Web**: Runs the OpenCode web interface on startup
 - **Port**: Exposes port 4096 for the web UI
-- **Persistent Storage**: Volume-mounted data directory for session persistence
-- **Auto-Published**: Automatically built and published to GHCR on every commit
+- **Persistent Storage**: Separate volumes for projects and configuration
+  - `./data` - Projects and working directory
+  - `./config` - Global configuration, providers, and oh-my-opencode settings
+- **Auto-Published**: Automatically built and published to GHCR when Dockerfile changes
 
 ## Quick Start
 
@@ -44,6 +46,7 @@ docker run -d \
   --name opencode-web \
   -p 4096:4096 \
   -v ./data:/data \
+  -v ./config:/root/.config/opencode \
   ghcr.io/ikbenignace/opencode-docker:latest
 ```
 
@@ -62,6 +65,7 @@ docker run -d \
      --name opencode-web \
      -p 4096:4096 \
      -v ./data:/data \
+     -v ./config:/root/.config/opencode \
      opencode-docker
    ```
 
@@ -82,6 +86,7 @@ docker run -d \
   --name opencode-web \
   -p 4096:4096 \
   -v ./data:/data \
+  -v ./config:/root/.config/opencode \
   -e OPENCODE_SERVER_PASSWORD=your-secure-password-here \
   -e OPENCODE_SERVER_USERNAME=admin \
   ghcr.io/ikbenignace/opencode-docker:latest
@@ -100,14 +105,32 @@ environment:
 
 ### Persistent Storage
 
-The container uses a volume mounted at `/data` for persistent storage. This ensures your OpenCode sessions and settings are preserved across container restarts.
+The container uses two separate volumes for persistent storage:
 
-With Docker Compose, the data is stored in `./data` in your current directory.
+#### 1. Projects Directory (`./data`)
+- Mounted at `/data` inside the container
+- This is your working directory where you work on code projects
+- All project files and project-specific `.opencode/` directories are stored here
 
-With Docker CLI, specify the volume mount:
+#### 2. Configuration Directory (`./config`)
+- Mounted at `/root/.config/opencode` inside the container
+- Stores global OpenCode configuration including:
+  - Provider settings (API keys for OpenAI, Anthropic, etc.)
+  - Oh-my-opencode installations and configurations
+  - Global agents, commands, and plugins
+  - User preferences and themes
+
+**With Docker Compose:**
+- Projects: `./data` in your current directory
+- Config: `./config` in your current directory
+
+**With Docker CLI, specify both volume mounts:**
 ```bash
--v /path/to/your/data:/data
+-v /path/to/your/projects:/data \
+-v /path/to/your/config:/root/.config/opencode
 ```
+
+This separation ensures that your provider configurations and global settings persist independently from your project files.
 
 ## Accessing the Web Interface
 
