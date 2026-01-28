@@ -82,7 +82,7 @@ docker run -d \
   --name opencode-web \
   -p 4096:4096 \
   -v ./data:/data \
-  -e OPENCODE_SERVER_PASSWORD=mysecretpassword \
+  -e OPENCODE_SERVER_PASSWORD=your-secure-password-here \
   -e OPENCODE_SERVER_USERNAME=admin \
   ghcr.io/ikbenignace/opencode-docker:latest
 ```
@@ -92,9 +92,11 @@ Or in `docker-compose.yml`:
 environment:
   - OPENCODE_SERVER_PORT=4096
   - OPENCODE_SERVER_HOSTNAME=0.0.0.0
-  - OPENCODE_SERVER_PASSWORD=mysecretpassword
+  - OPENCODE_SERVER_PASSWORD=your-secure-password-here
   - OPENCODE_SERVER_USERNAME=admin
 ```
+
+**Important**: Replace `your-secure-password-here` with a strong, unique password in production environments.
 
 ### Persistent Storage
 

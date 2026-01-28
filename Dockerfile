@@ -6,13 +6,14 @@ ENV OPENCODE_SERVER_PORT=4096
 ENV OPENCODE_SERVER_HOSTNAME=0.0.0.0
 
 # Install opencode globally
-# Using --strict-ssl=false to handle potential certificate issues in build environments
+# Note: strict-ssl is temporarily disabled during installation to handle certificate chain issues
+# in Docker build environments. This is re-enabled immediately after installation.
 RUN npm config set strict-ssl false && \
     npm install -g opencode-ai && \
     npm config set strict-ssl true
 
-# Create data directory for persistent storage
-RUN mkdir -p /data && chmod 777 /data
+# Create data directory for persistent storage with appropriate permissions
+RUN mkdir -p /data && chmod 755 /data
 
 # Set working directory
 WORKDIR /data

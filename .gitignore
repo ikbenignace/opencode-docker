@@ -12,9 +12,6 @@ Thumbs.db
 *.swo
 *~
 
-# Docker
-.dockerignore
-
 # Logs
 *.log
 npm-debug.log*

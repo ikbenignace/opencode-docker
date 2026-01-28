@@ -1,0 +1,28 @@
+# Git files
+.git
+.gitignore
+.gitattributes
+
+# GitHub
+.github
+
+# Data directory
+data/
+
+# Docker files
+docker-compose.yml
+Dockerfile
+
+# Documentation
+README.md
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
