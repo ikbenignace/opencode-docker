@@ -23,6 +23,7 @@ ENV PATH="$BUN_INSTALL/bin:$PATH"
 # Install Node.js and npm
 # Note: Using Ubuntu's default Node.js (v12) with npm package
 # This is sufficient for installing OpenCode via npm
+# TODO: Consider upgrading to a supported Node.js LTS version (v18 or v20) once SSL certificate issues in build environment are resolved
 RUN apt-get update && \
     apt-get install -y nodejs npm && \
     apt-get clean && \
