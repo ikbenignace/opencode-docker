@@ -1,5 +1,5 @@
 # Use Microsoft's Universal DevContainer as base
-FROM mcr.microsoft.com/devcontainers/universal:2-linux
+FROM mcr.microsoft.com/devcontainers/universal:linux
 
 # Set environment variables
 ENV OPENCODE_SERVER_PORT=4096
